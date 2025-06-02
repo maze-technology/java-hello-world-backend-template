@@ -15,6 +15,7 @@ permissions:
   contents: read
   actions: write
   id-token: write
+  packages: read
 
 jobs:
   prepare_tag:
@@ -62,6 +63,9 @@ jobs:
 
       - name: Build with Makefile
         run: make build
+        env:
+          GITHUB_USERNAME: x-access-token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3

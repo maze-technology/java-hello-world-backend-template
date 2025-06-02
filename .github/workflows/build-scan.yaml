@@ -19,6 +19,7 @@ permissions:
   contents: read
   actions: read
   checks: write
+  packages: read
 
 jobs:
   build_scan:
@@ -49,6 +50,9 @@ jobs:
 
       - name: Build with Makefile
         run: make build
+        env:
+          GITHUB_USERNAME: x-access-token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/linux@v2
