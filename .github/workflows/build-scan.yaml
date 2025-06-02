@@ -1,0 +1,91 @@
+name: Build & Security Scan
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  # INFO: Daily security scan
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch: {}
+
+env:
+  VERSION: ${{ github.event.pull_request.number }}-${{ github.run_number }}
+  JAVA_HOME: '' # INFO: Force JAVA_HOME to be empty, so gradle will use the sdkman java version
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  build_scan:
+    runs-on: ubuntu-latest
+    outputs:
+      APP_NAME: ${{ steps.app_name.outputs.value }}
+    steps:
+      - id: app_name
+        run: echo "value=$(echo '${{ github.repository }}' | awk -F '.' '{print $3}')" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
+
+      - name: Cache SDKMAN
+        uses: actions/cache@v4
+        with:
+          path: ~/.sdkman
+          key: sdkman-${{ runner.os }}-${{ hashFiles('.sdkmanrc') }}
+
+      - name: Install SDKMAN
+        uses: sdkman/sdkman-action@b1f9b696c79148b66d3d3a06f7ea801820318d0f
+
+      # INFO: Tell Gradle which JDK to use *regardless* of what happens to JAVA_HOME
+      - name: Point Gradle at the SDKMAN JDK
+        run: echo "JAVA_HOME=$HOME/.sdkman/candidates/java/current" >> $GITHUB_ENV
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Makefile
+        run: make build
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: |
+            build/test-results/**/*.xml
+
+      - name: Publish Checkstyle Results
+        uses: jwgmeligmeyling/checkstyle-github-action@v1
+        with:
+          path: 'build/reports/checkstyle/main.xml'
+
+      - name: Archive test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Test report
+          path: build/reports/tests
+
+      - name: Add coverage to PR
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.7.1
+        with:
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+
+      - name: Build Docker Image
+        run: ./gradlew bootBuildImage --imageName=${{ steps.app_name.outputs.value }}:${{ env.VERSION }}
+
+      - name: Code vulnerability scan
+        uses: anchore/scan-action@v6
+        with:
+          image: '${{ steps.app_name.outputs.value }}:${{ env.VERSION }}'
+          fail-build: true
+          severity-cutoff: 'high'
+          output-format: table
+          only-fixed: false

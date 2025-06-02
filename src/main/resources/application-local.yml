@@ -1,0 +1,58 @@
+logging:
+  level:
+    root: info
+
+    # Maze
+    tech.maze: info
+
+    # HTTP request/response logging
+    si.mazi.rescu: warn
+
+    # Database
+    org.hibernate.SQL: warn
+
+    # AWS Cloud
+    io.awspring.cloud.sqs: info
+    software.amazon: info
+
+    io.awspring.cloud.sqs.listener.sink: trace
+
+maze:
+  name: local
+
+spring:
+  datasource:
+    enabled: true
+    default:
+      url: jdbc:postgresql://localhost:5432/local
+      username: local
+      password: local
+  cloud:
+    aws:
+      region:
+        static: eu-central-1
+      credentials:
+        access-key: localstackAccessKeyId
+        secret-key: localstackSecretAccessKey
+    # stream:
+    #   default-binder: aws-messaging
+    #   bindings:
+    #     inputEvents-in-0:
+    #       destination: queue-in
+    #       consumer:
+    #         max-number-of-messages: 10
+    #         visibility-timeout: 30
+    #         wait-timeout: 20
+    #         back-off-time: 10000
+    #     outputEvents-out-0:
+    #       destination: local-topic
+    #   binders:
+    #     aws-messaging:
+    #       type: aws-messaging
+    #       environment:
+    #         aws:
+    #           region: eu-central-1
+    #           credentials:
+    #             access-key: localstackAccessKeyId
+    #             secret-key: localstackSecretAccessKey
+    #           endpoint: http://localhost:4566
