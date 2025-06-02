@@ -42,6 +42,7 @@ jobs:
       contents: read
       packages: read
       id-token: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
