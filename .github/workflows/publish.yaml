@@ -95,11 +95,9 @@ jobs:
           only-fixed: false
 
       - name: Publish Docker Image
-        uses: gradle/gradle-build-action@v3
         env:
           DOCKER_IMAGE: '${{ env.DOCKER_REPOSITORY }}:${{ needs.prepare_tag.outputs.VERSION }}'
-        with:
-          arguments: bootBuildImage --publishImage --imageName=${{ env.DOCKER_IMAGE }}
+        run: ./gradlew bootBuildImage --publishImage --imageName=${{ env.DOCKER_IMAGE }}
 
   prepare_changelog:
     name: Prepare Changelog
