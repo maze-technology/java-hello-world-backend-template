@@ -4,7 +4,7 @@ plugins {
   id("checkstyle")
   id("application")
   id("com.github.spotbugs") version "6.1.5"
-  id("org.springframework.boot") version "3.4.3"
+  id("org.springframework.boot") version "3.4.5"
   id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -19,7 +19,7 @@ ext {
   mapStructVersion            = "1.6.3"
   snakeyamlVersion            = "2.4"
   postgresqlVersion           = "42.7.5"
-  springBootVersion           = "3.4.3"
+  springBootVersion           = "3.4.5"
   mazeCommonsVersion          = "0.0.7"
   mazeDtosHelloWorldVersion   = "0.0.3"
   protocPluginVersion         = "1.70.0"
@@ -262,7 +262,7 @@ tasks.named("check") {
 }
 
 bootBuildImage {
-  builder = "paketobuildpacks/builder-jammy-base:0.4.378"
+  builder = "paketobuildpacks/builder-jammy-base:0.4.417"
   // https://github.com/paketo-buildpacks/builder-jammy-base/
 
   environment = [
