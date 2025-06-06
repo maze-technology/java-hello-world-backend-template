@@ -1,15 +1,10 @@
 package tech.maze.helloworld.backend.controllers;
 
-import io.grpc.Status;
-import io.grpc.StatusException;
 import io.grpc.stub.StreamObserver;
-import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import net.devh.boot.grpc.server.advice.GrpcAdvice;
-import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 import net.devh.boot.grpc.server.service.GrpcService;
 import tech.maze.dtos.helloworld.controllers.HelloWorldGrpc;
 import tech.maze.dtos.helloworld.payloads.AddRequest;
@@ -25,7 +20,6 @@ import tech.maze.helloworld.backend.services.MessagesService;
  */
 @RequiredArgsConstructor
 @GrpcService
-@GrpcAdvice
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class HelloWorldGrpcController extends HelloWorldGrpc.HelloWorldImplBase {
   MessagesService messagesService;
@@ -36,7 +30,6 @@ public class HelloWorldGrpcController extends HelloWorldGrpc.HelloWorldImplBase 
       AddRequest request,
       StreamObserver<AddResponse> responseObserver
   ) {
-    // TODO: Add protovalidate validation
     final AddResponse response = AddResponse.newBuilder()
         .setMessage(messageMapper
             .toDto(messagesService
@@ -53,7 +46,6 @@ public class HelloWorldGrpcController extends HelloWorldGrpc.HelloWorldImplBase 
       GetAllRequest request,
       StreamObserver<GetAllResponse> responseObserver
   ) {
-    // TODO: Add protovalidate validation
     final GetAllResponse response = GetAllResponse.newBuilder()
         .addAllMessages(messagesService.getMessages()
           .stream()
@@ -63,25 +55,5 @@ public class HelloWorldGrpcController extends HelloWorldGrpc.HelloWorldImplBase 
 
     responseObserver.onNext(response);
     responseObserver.onCompleted();
-  }
-
-  /**
-   * Handle ConstraintViolationException raised by validation and pipe it to GRPC.
-   */
-  @GrpcExceptionHandler(ConstraintViolationException.class)
-  public StatusException handleConstraintViolationException(ConstraintViolationException e) {
-    Status status = Status.INVALID_ARGUMENT.withDescription(e.getMessage()).withCause(e);
-
-    return status.asException();
-  }
-
-  /**
-   * Handle IllegalArgumentException raised and pipe it to GRPC.
-   */
-  @GrpcExceptionHandler(IllegalArgumentException.class)
-  public StatusException handleIllegalArgumentException(IllegalArgumentException e) {
-    Status status = Status.INVALID_ARGUMENT.withDescription(e.getMessage()).withCause(e);
-
-    return status.asException();
   }
 }
