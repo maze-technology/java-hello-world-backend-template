@@ -1,0 +1,54 @@
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - '127.0.0.1:4566:4566'
+      - '127.0.0.1:4510-4559:4510-4559'
+    environment:
+      - DEBUG=${DEBUG-}
+      - PERSISTENCE=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SERVICES=sqs,kms,secretsmanager
+      - DEFAULT_REGION=eu-central-1
+      - AWS_DEFAULT_REGION=eu-central-1
+    volumes:
+      - './local/localstack/bootstrap:/etc/localstack/init/ready.d'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    networks:
+      - maze_network
+
+  valkey-master:
+    image: valkey/valkey:8.1-alpine
+    ports:
+      - '6379:6379'
+    networks:
+      - maze_network
+
+  valkey-sentinel:
+    image: valkey/valkey:8.1-alpine
+    ports:
+      - '26379:26379'
+    volumes:
+      - ./local/valkey/sentinel.conf:/usr/local/etc/valkey/sentinel.conf
+    command: valkey-sentinel /usr/local/etc/valkey/sentinel.conf --sentinel
+    networks:
+      - maze_network
+    depends_on:
+      - valkey-master
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - './local/postgres/bootstrap:/docker-entrypoint-initdb.d'
+    ports:
+      - '5432:5432'
+    networks:
+      - maze_network
+
+networks:
+  maze_network:
+    driver: bridge
