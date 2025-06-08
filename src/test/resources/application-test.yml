@@ -17,6 +17,6 @@ spring:
           fail-on-missing-queue: false
           default-deletion-policy: NO_REDRIVE
           max-number-of-messages: 10
-          visibility-timeout: 30  # 30s
-          wait-timeout: 20        # 20s
-          back-off-time: 10000    # 10s
+          visibility-timeout: 30 # 30s
+          wait-timeout: 20 # 20s
+          back-off-time: 10000 # 10s
