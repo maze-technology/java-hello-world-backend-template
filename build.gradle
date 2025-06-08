@@ -174,7 +174,7 @@ dependencies {
 checkstyle {
   toolVersion = "10.21.3"
   maxWarnings = 0
-  ignoreFailures = true
+  ignoreFailures = false
   sourceSets = [project.sourceSets.main]
 }
 
@@ -222,6 +222,9 @@ jacocoTestReport {
     xml.required = true
     csv.required = false
   }
+
+  dependsOn test
+  mustRunAfter javadoc
 }
 
 tasks.named("jacocoTestReport") {
@@ -259,19 +262,26 @@ testing {
 }
 
 tasks.withType(Javadoc).configureEach {
-  // TODO: is it still necessary for filtering?
-  source = source.filter {
-    !it.absolutePath.startsWith("${buildDir.absolutePath}/generated/")
-  }
+  options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 tasks.named("checkstyleMain", Checkstyle) {
-  // TODO: is it still necessary for filtering?
-  source = source.filter { !it.absolutePath.contains("tech/maze/dtos") }
+  showViolations = true
+
+  reports {
+    xml.required = true
+    html.required = true
+  }
 }
 
 tasks.named("check") {
   dependsOn testing.suites.integrationTest
+  dependsOn javadoc
+}
+
+// Add this to ensure checkstyle runs before check
+tasks.named("check").configure {
+  dependsOn checkstyleMain
 }
 
 bootBuildImage {
