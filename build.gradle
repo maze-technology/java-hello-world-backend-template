@@ -34,6 +34,8 @@ ext {
   lombokMapstructBindingVersion = "0.2.0"
   grpcVersion                 = "1.73.0"
   flywayVersion               = "11.8.2"
+  mapStructSpringVersion  = "1.1.3"
+  h2Version                 = "2.3.232"
 }
 
 repositories {
@@ -139,6 +141,8 @@ dependencies {
   annotationProcessor "de.firehead:mapstruct-spi-protobuf:$mapStructSPIProtobufVersion"
   // Lombok Mapstruct mapping (Builder support)
   annotationProcessor "org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion"
+  implementation "org.mapstruct.extensions.spring:mapstruct-spring-annotations:$mapStructSpringVersion"
+  annotationProcessor "org.mapstruct.extensions.spring:mapstruct-spring-extensions:$mapStructSpringVersion"
 
   // Lombok
   compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -160,6 +164,9 @@ dependencies {
   testImplementation "org.junit.jupiter:junit-jupiter"
   testImplementation "org.junit.jupiter:junit-jupiter-api"
   testImplementation "org.junit.jupiter:junit-jupiter-engine"
+  testImplementation "org.mapstruct.extensions.spring:mapstruct-spring-test-extensions:$mapStructSpringVersion"
+  testAnnotationProcessor "org.mapstruct.extensions.spring:mapstruct-spring-extensions:$mapStructSpringVersion"
+  testImplementation "com.h2database:h2:$h2Version"
 
   // Mock Frameworks
   testImplementation "com.github.tomakehurst:wiremock-jre8-standalone:$wiremockVersion"

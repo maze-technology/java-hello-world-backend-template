@@ -34,12 +34,8 @@ public class Message {
   UUID id;
 
   @NotBlank
-  // TODO: Remove?
-  // @Size(max = 255)
   String content;
 
   @CreatedDate
-  // TODO: Remove?
-  // @Column(name = "created_at")
   Instant createdAt;
 }

@@ -24,7 +24,7 @@ import tech.maze.helloworld.backend.models.Message;
       UuidMapper.class
     }
 )
-public abstract class MessageMapper {
+public interface MessageMapper {
   public static final MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
   /**
@@ -33,7 +33,7 @@ public abstract class MessageMapper {
    * @param messageEntity the Message entity to convert
    * @return the corresponding Message DTO
    */
-  public abstract tech.maze.dtos.helloworld.models.Message toDto(Message messageEntity);
+  tech.maze.dtos.helloworld.models.Message toDto(Message messageEntity);
 
   /**
    * Maps a Message DTO to a Message entity.
@@ -41,7 +41,7 @@ public abstract class MessageMapper {
    * @param messageDto the Message DTO to convert
    * @return the corresponding Message entity
    */
-  public abstract Message toEntity(tech.maze.dtos.helloworld.models.Message messageDto);
+  Message toEntity(tech.maze.dtos.helloworld.models.Message messageDto);
 
   /**
    * Maps an AddRequest DTO to a Message entity.
@@ -49,5 +49,5 @@ public abstract class MessageMapper {
    * @param addRequestDto the request DTO to convert
    * @return the corresponding Message entity
    */
-  public abstract Message toEntity(tech.maze.dtos.helloworld.payloads.AddRequest addRequestDto);
+  Message toEntity(tech.maze.dtos.helloworld.payloads.AddRequest addRequestDto);
 }
