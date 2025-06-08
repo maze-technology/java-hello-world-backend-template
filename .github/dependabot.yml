@@ -5,11 +5,9 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gradle"
-    directory: "/"
-    registries:
-      - github
+  - package-ecosystem: 'gradle'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
     reviewers:
-      - "maze-technology/java-engineers"
+      - 'maze-technology/java-engineers'
