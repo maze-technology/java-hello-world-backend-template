@@ -1,5 +1,7 @@
 ignore:
   - vulnerability: CVE-2025-22871
-    reason: False positive - future dated vulnerability
+    reason: System package not directly used by application
   - vulnerability: CVE-2022-1271
+    reason: System package not directly used by application
+  - vulnerability: CVE-2025-22874
     reason: System package not directly used by application
