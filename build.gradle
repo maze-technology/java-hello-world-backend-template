@@ -3,7 +3,7 @@ plugins {
   id("jacoco")
   id("checkstyle")
   id("application")
-  id("com.github.spotbugs") version "6.1.5"
+  id("com.github.spotbugs") version "6.2.0"
   id("org.springframework.boot") version "3.4.5"
   id("io.spring.dependency-management") version "1.1.7"
 }
@@ -285,7 +285,7 @@ tasks.named("check").configure {
 }
 
 bootBuildImage {
-  builder = "paketobuildpacks/builder-jammy-base:0.4.417"
+  builder = "paketobuildpacks/builder-jammy-base:0.4.425"
   // https://github.com/paketo-buildpacks/builder-jammy-base/
 
   environment = [
