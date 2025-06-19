@@ -285,7 +285,7 @@ tasks.named("check").configure {
 }
 
 bootBuildImage {
-  builder = "paketobuildpacks/builder-jammy-base:0.4.417"
+  builder = "paketobuildpacks/builder-jammy-base:0.4.425"
   // https://github.com/paketo-buildpacks/builder-jammy-base/
 
   environment = [
