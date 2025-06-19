@@ -33,7 +33,7 @@ ext {
   mapStructSPIProtobufVersion = "1.1.0"
   lombokMapstructBindingVersion = "0.2.0"
   grpcVersion                 = "1.73.0"
-  flywayVersion               = "11.8.2"
+  flywayVersion               = "11.9.1"
   mapStructSpringVersion  = "1.1.3"
 }
 
