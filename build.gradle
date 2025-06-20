@@ -28,7 +28,7 @@ ext {
   grpcSpringBootVersion       = "3.1.0.RELEASE"
   springCloudVersion          = "2024.0.0"
   springCloudAwsVersion       = "3.3.0"
-  testContainersVersion       = "1.20.5"
+  testContainersVersion       = "1.21.2"
   testContainersRedisVersion  = "1.6.4"
   mapStructSPIProtobufVersion = "1.1.0"
   lombokMapstructBindingVersion = "0.2.0"
