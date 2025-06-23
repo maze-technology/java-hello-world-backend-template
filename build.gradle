@@ -19,7 +19,7 @@ ext {
   mapStructVersion            = "1.6.3"
   snakeyamlVersion            = "2.4"
   postgresqlVersion           = "42.7.7"
-  springBootVersion           = "3.4.5"
+  springBootVersion           = "3.5.3"
   mazeCommonsVersion          = "0.0.9"
   mazeDtosHelloWorldVersion   = "0.0.3"
   protocPluginVersion         = "1.70.0"
